@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="DA">
+	<head>
+		<meta charset="utf-8">
+		<meta name="author" content="Andreas D. Kunz"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="../darktheme.css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
+		<script src="/scripts/snake.js"></script>
+		
+	</head>
+	<body>
+		<h1>Snake</h1>
+		<script type="text/javascript">
+			let width = 1000;
+			let height = 700;
+			let size = 50;
+			let w;
+			let h;
+			let snake;
+			let food;
+
+			function setup() {
+				createCanvas(width,height);
+				snake = new Snake(size);
+				w = floor(width / size);
+				h = floor(height / size);
+				foodLocation();
+			}
+
+			function foodLocation() {
+				let x = floor(random(w));
+				let y = floor(random(h));
+				food = createVector(x,y);
+			}
+
+			function keyPressed() {
+				switch (keyCode) {
+					case LEFT_ARROW: snake.setDir(-1,0); break; 
+					case RIGHT_ARROW: snake.setDir(1,0); break;
+					case UP_ARROW: snake.setDir(0,-1); break;
+					case DOWN_ARROW: snake.setDir(0,1); break;
+				}
+			}
+
+			function mousePressed() {
+				snake.grow();
+			}
+
+			function draw() {
+				frameRate(10);
+				background(220);
+				if (snake.eat(food)) {
+					foodLocation();
+				}
+				noStroke();
+				fill(255,0,0);
+				rect(food.x*size, food.y*size, size, size);
+				snake.update();
+				snake.show();
+
+				if (snake.endGame()) {
+					print("END GAME");
+					background(180);
+					noLoop();
+				}
+			}
+
+
+		</script>
+	</body>
+</html>
